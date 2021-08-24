@@ -20,7 +20,7 @@ def open_image(path: str):
     except Exception as e:
         print(
             "Failed to open the file, Please check if your path is correct ({})".format(e))
-        raise SystemExit
+        sys.exit(1)
 
 
 def read(path: str):
@@ -39,7 +39,12 @@ def _main(args):
     print("")
     if "-v" in args:
         test()
-    codes = read(args[0])
+    if len(args) != 2:
+        print(f"{sys.argv[0]} FILENAME\nMissing arguments or additional arguments passed")
+        sys.exit(1)
+    codes = read(args[1])
+    if codes is None:
+        sys.exit(1)
     for code in codes:
         if "-v" in args:
             print("Type: {}\nData: {}".format(
@@ -52,11 +57,11 @@ def _main(args):
 
 def main(args=None):
     if args is None:
-      args = sys.argv[1:]
+        args = sys.argv
     try:
         _main(args)
     except KeyboardInterrupt:
         print("Eww, Exiting...")
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    main()
